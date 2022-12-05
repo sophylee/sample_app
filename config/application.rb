@@ -36,8 +36,6 @@ module GiftedApi
     # middleware which supports the PUT and DELETE HTTP method types.
     config.middleware.use Rack::MethodOverride
 
-    # Sets cookies for the request
-    config.middleware.use ActionDispatch::Cookies
 
   end
 end
