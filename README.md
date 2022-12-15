@@ -15,10 +15,15 @@ rackup -p 5000
 
 ## API
 
+## Local testing
+
+- Navigate to http://api.local-gifted.com:5000/
+- Open the developer console and run one of the fetch commands
+
 ### Create user
 
 Request
-```
+```js
 fetch('http://api.local-gifted.com:5000/v1/users', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': "VALID_TOKEN_HERE"},
@@ -30,14 +35,14 @@ fetch('http://api.local-gifted.com:5000/v1/users', {
 Response
 
 Errors
-```
+```json
 {
-  errors: [
+  "errors": [
     {
-      code: "too_short",
-      detail: "Password is too short (minimum is 10 characters)",
-      status: "422",
-      title: "Unprocessable Entity"
+      "code": "too_short",
+      "detail": "Password is too short (minimum is 10 characters)",
+      "status": "422",
+      "title": "Unprocessable Entity"
     }
   ]
 }
