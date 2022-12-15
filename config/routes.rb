@@ -1,9 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
-
   # Defines the root path route ("/")
-  root to: "home#index"
-
-  get "/users/hello", to: "users#hello"
+  root to: proc { [200, {}, ['']] }
+  draw(:api)
+  devise_for :users
 end
