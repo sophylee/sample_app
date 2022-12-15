@@ -30,6 +30,9 @@ module GiftedApi
     # Required for all session management (regardless of session_store)
     config.middleware.use ActionDispatch::Cookies
 
+    # Added to use cookies for session management
+    config.middleware.use ActionDispatch::Session::CookieStore
+
     config.middleware.use config.session_store, config.session_options
 
     # Allows the method to be overridden if params[:_method] is set. This is the 
