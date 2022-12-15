@@ -39,6 +39,14 @@ module GiftedApi
     # middleware which supports the PUT and DELETE HTTP method types.
     config.middleware.use Rack::MethodOverride
 
+    # Set additional headers for security
+    config.action_dispatch.default_headers = {
+      'Cross-Origin-Embedder-Policy' => 'require-corp',
+      'Cross-Origin-Opener-Policy' => 'same-origin',
+      'Cross-Origin-Resource-Policy' => 'same-origin',
+      'Origin-Agent-Cluster' => '?1',
+      'Strict-Transport-Security' => 'max-age=15552000; includeSubDomains'
+    }
 
   end
 end
