@@ -1,24 +1,44 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Local setup
 
-Things you may want to cover:
+Use Ruby 3.1.3
+```
+rvm install 3.1.3
+rvm use 3.1.3
+```
 
-* Ruby version
+Start server
+```
+rackup -p 5000
+```
 
-* System dependencies
+## API
 
-* Configuration
+### Create user
 
-* Database creation
+Request
+```
+fetch('http://api.local-gifted.com:5000/v1/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': "VALID_TOKEN_HERE"},
+    body: JSON.stringify({ user: { email: "test13@test.com", password: "password" } }),
+    credentials: 'include'
+})
+```
 
-* Database initialization
+Response
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Errors
+```
+{
+  errors: [
+    {
+      code: "too_short",
+      detail: "Password is too short (minimum is 10 characters)",
+      status: "422",
+      title: "Unprocessable Entity"
+    }
+  ]
+}
+```
