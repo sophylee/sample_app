@@ -35,6 +35,9 @@ module GiftedApi
 
     config.middleware.use config.session_store, config.session_options
 
+    # Necessary to fix issue where actionpack tries to set flash message after checking CSRF
+    config.middleware.use ActionDispatch::Flash
+
     # Allows the method to be overridden if params[:_method] is set. This is the 
     # middleware which supports the PUT and DELETE HTTP method types.
     config.middleware.use Rack::MethodOverride
