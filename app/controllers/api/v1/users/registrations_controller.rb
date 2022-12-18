@@ -7,9 +7,9 @@ module Api
         if resource.save
           if resource.active_for_authentication?
             sign_up(resource_name, resource)
-            render UserSerializer.new(resource).serializable_hash.to_json
+            render json: UserSerializer.new(resource).serializable_hash.to_json
           else
-            render UserSerializer.new(resource).serializable_hash.to_json
+            render json: UserSerializer.new(resource).serializable_hash.to_json
           end
         else
           clean_up_passwords resource
