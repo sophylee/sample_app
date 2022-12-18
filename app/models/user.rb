@@ -4,4 +4,13 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, 
          :confirmable, :lockable
+
+  validates_format_of :password,
+                      with: /(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])/,
+                      if: -> {
+                        password.present? &&
+                          encrypted_password.present? &&
+                          encrypted_password_changed?
+                      },
+                      message: :complexity
 end

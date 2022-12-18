@@ -30,4 +30,10 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            password:
+              complexity: not strong enough. Please use 1 uppercase, 1 lowercase, 1 digit, and 1 special character.
