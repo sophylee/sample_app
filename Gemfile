@@ -36,6 +36,7 @@ group :development, :test do
   gem 'pry-byebug' # https://github.com/deivid-rodriguez/pry-byebug binding dot pry for debugging
   gem 'rspec'
   gem 'rspec-rails'
+  gem 'factory_bot_rails' # https://github.com/thoughtbot/factory_bot
 end
 
 group :development do
