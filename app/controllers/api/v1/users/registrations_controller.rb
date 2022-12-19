@@ -5,12 +5,8 @@ module Api
         build_resource(sign_up_params)
         
         if resource.save
-          if resource.active_for_authentication?
-            sign_up(resource_name, resource)
-            render json: UserSerializer.new(resource).serializable_hash.to_json
-          else
-            render json: UserSerializer.new(resource).serializable_hash.to_json
-          end
+          sign_up(resource_name, resource)
+          render json: UserSerializer.new(resource).serializable_hash.to_json
         else
           clean_up_passwords resource
           render jsonapi_errors: resource.errors, status: :unprocessable_entity
