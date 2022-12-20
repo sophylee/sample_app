@@ -129,7 +129,7 @@ describe 'CSRF security', type: :request do
       one_time_pad = decoded_csrf_token[0...32]
       encrypted_csrf_token = decoded_csrf_token[32..-1]
       encrypted_csrf_token = encrypted_csrf_token.dup
-      size = s1.bytesize
+      size = one_time_pad.bytesize
       i = 0
       while i < size
         encrypted_csrf_token.setbyte(i, one_time_pad.getbyte(i) ^ encrypted_csrf_token.getbyte(i))
