@@ -17,8 +17,8 @@ rackup -p 5000
 
 ## Local testing
 
-- Navigate to http://api.local-gifted.com:5000/
-- Open the developer console and run one of the fetch commands
+- Navigate to http://api.local-gifted.com:5000/v1/csrf/restore
+- Open the developer tools > Application > Cookies and copy the 
 
 ### Create user
 

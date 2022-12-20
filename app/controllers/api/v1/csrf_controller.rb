@@ -4,7 +4,7 @@ module Api
       skip_before_action :authenticate_user!, only: [:restore]
 
       def restore
-        render json: "hi"
+        render :head
       end
     end
   end

@@ -37,7 +37,6 @@ describe 'CSRF security', type: :request do
     context 'when the user does include a CSRF token in their request' do
       it 'allows the user to use the pre-session CSRF token both before and after registration' do 
         post user_registration_url, params: params, headers: with_pre_session_token_headers
-
         expect(response.status).to eq(200)
         response_body = JSON.parse(response.body)
         expect(response_body["data"]).to be_a_kind_of(Hash)
@@ -107,14 +106,14 @@ describe 'CSRF security', type: :request do
         end
         real_session_token = s4
 
-        expect(real_pre_session_csrf_token).to eq(real_session_token)
+        expect(real_pre_session_csrf_token).to_not eq(real_session_token)
 
         # Now try to make an authenticated request using the pre_session_csrf_token. It should still work.
         # We can use the same headers and params as we used for registration. TODO test a real endpoint here.
         post authenticated_endpoint_api_v1_users_url, params: params, headers: with_pre_session_token_headers
-        expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)["data"]["attributes"]).to eq({"email" => email})
-        expect(response.headers["Set-Cookie"].include?("_api_csrf_token=")).to eq(true)
+        expect(response.status).to eq(403)
+        # expect(JSON.parse(response.body)["data"]["attributes"]).to eq({"email" => email})
+        # expect(response.headers["Set-Cookie"].include?("_api_csrf_token=")).to eq(true)
 
         # Now make a request using the session_token. It should work too.
         with_session_token_headers = { 'Content-Type' => 'application/json', 'X-CSRF-Token' => session_csrf_token }
@@ -122,9 +121,11 @@ describe 'CSRF security', type: :request do
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)["data"]["attributes"]).to eq({"email" => email})
         expect(response.headers["Set-Cookie"].include?("_api_csrf_token=")).to eq(true)
+        new_token = response.header["Set-Cookie"].split(";")[0].split("_api_csrf_token=")[1]
 
         # Sign out the user using the pre_session_csrf_token
-        delete destroy_user_session_url, headers: with_pre_session_token_headers
+        with_new_session_token_headers = { 'Content-Type' => 'application/json', 'X-CSRF-Token' => new_token }
+        delete destroy_user_session_url, headers: with_new_session_token_headers
         expect(response.status).to eq(204)
         expect(response.headers["Set-Cookie"].include?("_api_csrf_token=")).to eq(true)
 

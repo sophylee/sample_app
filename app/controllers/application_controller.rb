@@ -4,11 +4,12 @@ class ApplicationController < ActionController::API
   include ActionController::RequestForgeryProtection
   protect_from_forgery with: :exception
   respond_to :json
-  before_action :set_csrf_cookie
+  after_action :set_csrf_cookie
   before_action :authenticate_user!
   
   # Error handling
   include JSONAPI::Errors
+  
   rescue_from ActiveRecord::RecordNotFound do |e|
     render jsonapi_errors: e, status: :not_found
   end

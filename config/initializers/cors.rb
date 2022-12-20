@@ -12,7 +12,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
             "http://local-gifted.com:3000", 
             "http://local-gifted.com:5000",
             "http://api.local-gifted.com:3000", 
-            "http://api.local-gifted.com:5000"
+            "http://api.local-gifted.com:5000",
+            "localhost"
 
     resource "*",
       headers: :any,
