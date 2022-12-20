@@ -64,7 +64,7 @@ describe 'CSRF security', type: :request do
         session_csrf_token = response.header["Set-Cookie"].split(";")[0].split("_api_csrf_token=")[1]
         
         # Since the tokens are masked and encoded, we expect them to look **different**. This doesn't prove yet that the
-        # real CSRF token underlying these client-facing tokens are different. We'll prove that later.
+        # real CSRF token underlying these client-facing tokens are different. We'll prove that in the next few lines.
         expect(pre_session_csrf_token).to_not eq(session_csrf_token)
 
         # Decode and then unmask the pre_session_csrf_token and session_csrf_token to get their real values
@@ -81,6 +81,7 @@ describe 'CSRF security', type: :request do
         # We can use the same headers and params as we used for registration. 
         post authenticated_endpoint_api_v1_users_url, params: params, headers: with_pre_session_token_headers
         expect(response.status).to eq(403)
+        expect(JSON.parse(response.body)["errors"][0]["title"]).to eq("Can't verify CSRF token authenticity.")
 
         # Now make a request using the session_token. It SHOULD work.
         with_session_token_headers = { 'Content-Type' => 'application/json', 'X-CSRF-Token' => session_csrf_token }
@@ -88,16 +89,19 @@ describe 'CSRF security', type: :request do
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)["data"]["attributes"]).to eq({"email" => email})
         expect(response.headers["Set-Cookie"].include?("_api_csrf_token=")).to eq(true)
-        new_token = response.header["Set-Cookie"].split(";")[0].split("_api_csrf_token=")[1]
 
-        # Sign out the user using the session_csrf_token
-        with_new_session_token_headers = { 'Content-Type' => 'application/json', 'X-CSRF-Token' => session_csrf_token }
-        delete destroy_user_session_url, headers: with_new_session_token_headers
+        # Try to sign out the user using the pre_session_csrf_token. It should NOT work.
+        delete destroy_user_session_url, headers: with_pre_session_token_headers
+        expect(response.status).to eq(403)
+        expect(JSON.parse(response.body)["errors"][0]["title"]).to eq("Can't verify CSRF token authenticity.")
+        expect(response.headers["Set-Cookie"].include?("_api_csrf_token=")).to_not eq(true)
+
+        # Sign out the user using the session_csrf_token. It SHOULD work.
+        delete destroy_user_session_url, headers: with_session_token_headers
         expect(response.status).to eq(204)
         expect(response.headers["Set-Cookie"].include?("_api_csrf_token=")).to eq(true)
 
-        # Now try to sign in again using the pre_session_csrf_token. It should no longer work 
-        # since we signed out and created a new session incompatible with the original CSRF token.
+        # Now try to sign in again using the pre_session_csrf_token. It should NOT work.
         post user_session_url, params: params, headers: with_pre_session_token_headers
         expect(response.status).to eq(403)
         expect(JSON.parse(response.body)["errors"][0]["title"]).to eq("Can't verify CSRF token authenticity.")
@@ -109,6 +113,7 @@ describe 'CSRF security', type: :request do
         expect(JSON.parse(response.body)["errors"][0]["title"]).to eq("Can't verify CSRF token authenticity.")
         expect(response.headers["Set-Cookie"].include?("_api_csrf_token=")).to eq(false)
 
+        # Get a new pre-session CSRF token. This time the request to sign in should work.
         get restore_api_v1_csrf_url
         new_pre_session_csrf_token = response.header["Set-Cookie"].split(";")[0].split("_api_csrf_token=")[1]
         with_new_pre_session_token_headers = { 'Content-Type' => 'application/json', 'X-CSRF-Token' => new_pre_session_csrf_token }
