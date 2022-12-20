@@ -17,7 +17,7 @@ gem 'jsonapi-serializer' # https://github.com/jsonapi-serializer/jsonapi-seriali
 gem 'jsonapi.rb' # https://github.com/stas/jsonapi.rb Serialize errors 
 
 # Security
-gem 'devise'
+gem 'devise', git: 'https://github.com/sophylee/devise', branch: 'solution-2'
 gem "rack-cors" # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
