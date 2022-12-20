@@ -124,17 +124,18 @@ describe 'CSRF security', type: :request do
       end
     end
 
+    # Pulled directly from https://github.com/rails/rails/blob/main/actionpack/lib/action_controller/metal/request_forgery_protection.rb#L507-L513    
     def unmask(decoded_csrf_token)
-      s1 = decoded_csrf_token[0...32]
-      s2 = decoded_csrf_token[32..-1]
-      s2 = s2.dup
+      one_time_pad = decoded_csrf_token[0...32]
+      encrypted_csrf_token = decoded_csrf_token[32..-1]
+      encrypted_csrf_token = encrypted_csrf_token.dup
       size = s1.bytesize
       i = 0
       while i < size
-        s2.setbyte(i, s1.getbyte(i) ^ s2.getbyte(i))
+        encrypted_csrf_token.setbyte(i, one_time_pad.getbyte(i) ^ encrypted_csrf_token.getbyte(i))
         i += 1
       end
-      return s2
+      return encrypted_csrf_token
     end
   end  
 end
