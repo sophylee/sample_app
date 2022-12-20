@@ -9,7 +9,7 @@ bin/rake db:create RAILS_ENV=test
 
 Run relevant test
 ```
-rackup -p 5000
+rspec spec/requests/csrf_security_spec.rb
 ```
 
 ## API
