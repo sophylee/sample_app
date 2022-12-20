@@ -53,7 +53,7 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   # Necessary to set up Devise 
-  config.action_mailer.default_url_options = { host: 'test-gifted.com' }
+  config.action_mailer.default_url_options = { host: 'test-sample_app.com' }
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

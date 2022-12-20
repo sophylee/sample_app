@@ -2,13 +2,12 @@
 
 ## Local setup
 
-Use Ruby 3.1.3
+Set up test database
 ```
-rvm install 3.1.3
-rvm use 3.1.3
+bin/rake db:create RAILS_ENV=test
 ```
 
-Start server
+Run relevant test
 ```
 rackup -p 5000
 ```
@@ -17,14 +16,14 @@ rackup -p 5000
 
 ## Local testing
 
-- Navigate to http://api.local-gifted.com:5000/v1/csrf/restore
+- Navigate to http://api.local-sample_app.com:5000/v1/csrf/restore
 - Open the developer tools > Application > Cookies and copy the 
 
 ### Create user
 
 Request
 ```js
-fetch('http://api.local-gifted.com:5000/v1/users', {
+fetch('http://api.local-sample_app.com:5000/v1/users', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': "VALID_TOKEN_HERE"},
     body: JSON.stringify({ user: { email: "test13@test.com", password: "password" } }),

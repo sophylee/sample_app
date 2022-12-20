@@ -37,12 +37,7 @@ describe 'CSRF security', type: :request do
     context 'when the user does include a CSRF token in their request' do
       it 'allows the user to use the pre-session CSRF token both before and after registration' do 
         post user_registration_url, params: params, headers: with_pre_session_token_headers
-        expect(response.status).to eq(200)
-        response_body = JSON.parse(response.body)
-        expect(response_body["data"]).to be_a_kind_of(Hash)
-        expect(response_body["data"]["id"].to_i).to be_a_kind_of(Integer)
-        expect(response_body["data"]["type"]).to eq("user")
-        expect(response_body["data"]["attributes"]).to eq({"email" => email})
+        expect(response.status).to eq(201)
 
         # Get the new CSRF token returned by the API to the client. Note that this token is a masked, 
         # encrypted version of the same real CSRF token as the pre-session token. In other words:
