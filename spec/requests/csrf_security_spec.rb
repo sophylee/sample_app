@@ -35,7 +35,7 @@ describe 'CSRF security', type: :request do
     end
 
     context 'when the user does include a CSRF token in their request' do
-      it 'allows the user to use the pre-session CSRF token both before and after registration' do 
+      it 'the pre-session CSRF token cannot be used for authenticated requests' do 
         post user_registration_url, params: params, headers: with_pre_session_token_headers
         expect(response.status).to eq(201)
 
